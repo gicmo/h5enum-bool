@@ -14,17 +14,21 @@ main (void)
 
     file = H5Fcreate ("h5enum.h5", H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
-    int8_t t = 1, f = 0;
+    int8_t ti = 1, fi = 0;
     filetype = H5Tenum_create (H5T_NATIVE_INT8);
-    status = H5Tenum_insert (filetype, "TRUE", &t);
-    status = H5Tenum_insert (filetype, "FALSE", &f);
+    status = H5Tenum_insert (filetype, "TRUE", &ti);
+    status = H5Tenum_insert (filetype, "FALSE", &fi);
 
-    space = H5Screate_simple (1, dims, NULL);
+    space = H5Screate(H5S_SCALAR);
     dset = H5Dcreate (file, "ds1", filetype, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
 
+    fprintf(stderr, "sizeof(bool) = %lu\n", sizeof(bool));
+    bool tb = true, fb = false;
+    memtype = H5Tcreate (H5T_ENUM, sizeof(bool));
+    status = H5Tenum_insert (memtype, "TRUE", &tb);
+    status = H5Tenum_insert (memtype, "FALSE", &fb);
+
     bool b = true;
-    fprintf(stderr, "sizeof(bool) = %lu\n", sizeof(b));
-    memtype = H5Tcopy(H5T_NATIVE_INT8);
     status = H5Dwrite (dset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, &b);
 
     status = H5Dclose (dset);
