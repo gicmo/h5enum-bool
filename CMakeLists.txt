@@ -22,3 +22,6 @@ include_directories(${NIX_INCLUDE_DIRS})
 
 add_executable(nixenum nixenum.cc)
 target_link_libraries(nixenum ${NIX_LIBRARIES})
+
+add_executable(h5crash h5crash.cc)
+target_link_libraries(h5crash ${HDF5_LIBRARIES})
