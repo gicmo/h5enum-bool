@@ -168,7 +168,7 @@ static herr_t int2enum(hid_t src_id,
 			      buf_i, bkg_i, dxpl, 0);
 }
 
-typedef struct {
+typedef struct __attribute__((packed)) {
   bool b;
   const char *s;
 } value_t;
