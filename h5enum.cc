@@ -168,6 +168,11 @@ static herr_t int2enum(hid_t src_id,
 			      buf_i, bkg_i, dxpl, 0);
 }
 
+typedef struct {
+  bool b;
+  char *s;
+} value_t;
+
 int
 main (void)
 {
@@ -221,6 +226,25 @@ main (void)
     H5Tset_size(mt, strlen(tchar[0]));
 
     status = H5Dwrite (ds2, ft2, H5S_ALL, H5S_ALL, H5P_DEFAULT, tchar);
+
+
+    //
+    fprintf(stderr, "-- struct {bool, string} -- \n");
+
+    hid_t ctm = H5Tcreate (H5T_COMPOUND, sizeof (value_t));
+    status = H5Tinsert (ctm, "bool", HOFFSET (value_t, b), memtype);
+    status = H5Tinsert (ctm, "string", HOFFSET (value_t, s), ft2);
+
+    hid_t ctf = H5Tcreate (H5T_COMPOUND, sizeof (value_t));
+    status = H5Tinsert (ctf, "bool", HOFFSET (value_t, b), filetype);
+    status = H5Tinsert (ctf, "string", HOFFSET (value_t, s), ft2);
+
+    const value_t vals[1] = {{true, "hallo Welt"}};
+
+    hid_t ds3 = H5Dcreate (file, "ds3", ctf, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    status = H5Dwrite (ds3, ctm, H5S_ALL, H5S_ALL, H5P_DEFAULT, vals);
+
+    fprintf(stderr, "-- ┬─┬ノ( º _ ºノ)  --\n");
 
     status = H5Dclose (dset);
     status = H5Sclose (space);
