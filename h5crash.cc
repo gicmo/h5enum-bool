@@ -15,7 +15,7 @@
 
 typedef struct {
   bool b;
-  const char *s;
+  char *s;
 } value_t;
 
 int
@@ -44,11 +44,22 @@ main (void)
    H5Tinsert (ctf, "bool", HOFFSET (value_t, b), filetype);
    H5Tinsert (ctf, "string", HOFFSET (value_t, s), strtype);
 
-   const value_t vals[1] = {{true, "hallo welt"}};
+   char *str = strdup("hallo welt");
+   value_t vals[1] = {{true, str}};
 
    hid_t space = H5Screate(H5S_SCALAR);
    hid_t ds = H5Dcreate (file, "ds", ctf, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
    H5Dwrite (ds, ctm, H5S_ALL, H5S_ALL, H5P_DEFAULT, vals);
+
+   H5Sclose (space);
+   H5Tclose (filetype);
+   H5Tclose (memtype);
+   H5Tclose (ctm);
+   H5Tclose (ctf);
+   H5Dclose (ds);
+   H5Fclose (file);
+
+   free (str);
 
    fprintf(stderr, "(╯°□°）╯︵ ┻━┻\n");
    return 0;

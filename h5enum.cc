@@ -232,6 +232,8 @@ main (void)
     fprintf(stderr, "-- struct {bool, string} -- \n");
     fprintf(stderr, "sizeof (value_t) = %lu [b @ %lu, s @ %lu]\n",
 	    sizeof (value_t), HOFFSET (value_t, b), HOFFSET (value_t, s));
+    fprintf(stderr, "sizeof (bool) = %lu, sizeof (char *) = %lu, SUM: %lu\n",
+	    sizeof (bool), sizeof (char *), sizeof (bool) + sizeof (char *));
 
     hid_t ctm = H5Tcreate (H5T_COMPOUND, sizeof (value_t));
     status = H5Tinsert (ctm, "bool", HOFFSET (value_t, b), memtype);
