@@ -170,7 +170,7 @@ static herr_t int2enum(hid_t src_id,
 
 typedef struct {
   bool b;
-  char *s;
+  const char *s;
 } value_t;
 
 int
@@ -238,8 +238,8 @@ main (void)
     hid_t ctf = H5Tcreate (H5T_COMPOUND, sizeof (value_t));
     status = H5Tinsert (ctf, "bool", HOFFSET (value_t, b), filetype);
     status = H5Tinsert (ctf, "string", HOFFSET (value_t, s), ft2);
-
-    const value_t vals[1] = {{true, "hallo Welt"}};
+    
+    const value_t vals[1] = {{true, "hallo welt"}};
 
     hid_t ds3 = H5Dcreate (file, "ds3", ctf, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     status = H5Dwrite (ds3, ctm, H5S_ALL, H5S_ALL, H5P_DEFAULT, vals);
