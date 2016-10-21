@@ -209,6 +209,19 @@ main (void)
     int8_t bar = 1;
     status = H5Dwrite (dset, H5T_NATIVE_INT8, H5S_ALL, H5S_ALL, H5P_DEFAULT, &bar);
 
+    hid_t ft2 = H5Tcopy(H5T_C_S1);
+    H5Tset_size(ft2, H5T_VARIABLE);
+
+    fprintf(stderr, "-- str -- \n");
+
+    space = H5Screate(H5S_SCALAR);
+    hid_t ds2 = H5Dcreate (file, "ds2", ft2, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    const char *tchar[1] = {"Hallo Welt"};
+    hid_t mt = H5Tcopy(H5T_C_S1);
+    H5Tset_size(mt, strlen(tchar[0]));
+
+    status = H5Dwrite (ds2, ft2, H5S_ALL, H5S_ALL, H5P_DEFAULT, tchar);
+
     status = H5Dclose (dset);
     status = H5Sclose (space);
     status = H5Tclose (filetype);
