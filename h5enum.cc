@@ -230,6 +230,8 @@ main (void)
 
     //
     fprintf(stderr, "-- struct {bool, string} -- \n");
+    fprintf(stderr, "sizeof (value_t) = %lu [b @ %lu, s @ %lu]\n",
+	    sizeof (value_t), HOFFSET (value_t, b), HOFFSET (value_t, s));
 
     hid_t ctm = H5Tcreate (H5T_COMPOUND, sizeof (value_t));
     status = H5Tinsert (ctm, "bool", HOFFSET (value_t, b), memtype);
@@ -238,7 +240,7 @@ main (void)
     hid_t ctf = H5Tcreate (H5T_COMPOUND, sizeof (value_t));
     status = H5Tinsert (ctf, "bool", HOFFSET (value_t, b), filetype);
     status = H5Tinsert (ctf, "string", HOFFSET (value_t, s), ft2);
-    
+
     const value_t vals[1] = {{true, "hallo welt"}};
 
     hid_t ds3 = H5Dcreate (file, "ds3", ctf, space, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
